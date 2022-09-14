@@ -1,0 +1,92 @@
+<div *ngIf="feed">
+
+    <mat-card class="example-card">
+       <mat-card-header>
+         <div mat-card-avatar class="example-header-image"></div>
+         <mat-card-title>{{feed.name}}</mat-card-title>
+         <mat-card-subtitle>{{ feed.created_at | date }}</mat-card-subtitle>
+   
+         <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+           <mat-icon>more_vert</mat-icon>
+         </button>
+         <mat-menu #menu="matMenu">
+           <button color="warn" *ngIf="currentUser.id === feed.userId" (click)="deletePost(); $event.stopPropagation();" mat-menu-item>
+             <span>Supprimer</span>
+           </button>
+         </mat-menu>
+       </mat-card-header>
+       <mat-card-content>
+         <p class="text-content">{{feed.content}}</p>
+         <div *ngIf="feed.has_file">
+
+         <div *ngFor="let attachment of ('takerfiles/' + feed.id + '/') | getAmazonFiles | async">
+          <img style="width: 100%;"  *ngIf="attachment.typeFile === 'img'" [src]="attachment.url" [alt]="attachment.fullName" width="600" height="400">
+          <div *ngIf="attachment.typeFile === 'video'">
+           <video  style="width: 100%;" controls width="600">
+             <source [src]="attachment.url"  type="video/mp4">
+           </video>
+          </div>
+        </div>
+      </div>
+       </mat-card-content>
+       <mat-card-actions>
+         <button [ngClass]="{'liked': feed.liked }" (click)="feed.liked ? dislikeFeed() : likeFeed(); $event.stopPropagation();" mat-icon-button>
+             <mat-icon>favorite</mat-icon>
+         </button>
+         <small>{{feed.likes}}</small>
+   
+         <button  mat-icon-button (click)="openComment(); $event.stopPropagation();">
+           <mat-icon>question_answer</mat-icon>
+         </button>
+       </mat-card-actions>
+   
+       <div *ngIf="commentCtrl.enabled">
+         <mat-form-field>
+           <input [formControl]="commentCtrl" type="text" matInput>
+           <button (click)="commentFeed()" [disabled]="!commentCtrl.valid" matSuffix mat-icon-button>
+             <mat-icon matSuffix>send</mat-icon>
+           </button>
+         </mat-form-field>
+       </div>
+
+
+     </mat-card>
+
+<div style="margin-top: 5rem;">
+    <h4>Commentaire: </h4>
+     <mat-card  *ngFor="let comment of comments; let i = index" class="example-card">
+        <mat-card-header>
+          <div mat-card-avatar class="example-header-image"></div>
+          <mat-card-title>{{comment.name}}</mat-card-title>
+          <mat-card-subtitle>{{comment.created_at | date}}</mat-card-subtitle>
+
+          <button style="position: absolute; right: 0;" mat-icon-button [matMenuTriggerFor]="menuComment" aria-label="Example icon-button with a menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menuComment="matMenu">
+            <button *ngIf="editModeIndex === undefined || editModeIndex !== i"  (click)="changeEditMode(i); $event.stopPropagation();" mat-menu-item>
+              <span>Modifier</span>
+            </button>
+
+            <button *ngIf="editModeIndex !== undefined && editModeIndex === i" (click)="changeEditMode(); $event.stopPropagation();" mat-menu-item>
+              <span>Annuler</span>
+            </button>
+
+            <button color="warn" (click)="deleteComment(i); $event.stopPropagation();" mat-menu-item>
+              <span>Supprimer</span>
+            </button>
+          </mat-menu>
+        </mat-card-header>
+        <mat-card-content>
+          <p *ngIf="editModeIndex === undefined || editModeIndex !== i" class="text-content">{{comment.content}}</p>
+
+          <mat-form-field *ngIf="editModeIndex === i">
+            <input #commentInput type="text" matInput [value]="comment.content">
+            <button (click)="editComment(i, commentInput.value)" [disabled]="!commentInput.value" mat-icon-button matSuffix>
+              <mat-icon>send</mat-icon>
+            </button>
+          </mat-form-field>
+        </mat-card-content>
+      </mat-card>
+    </div>   
+</div>

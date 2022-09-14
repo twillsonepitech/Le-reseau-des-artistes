@@ -1,0 +1,25 @@
+
+.feed-container{
+  display:  flex;
+   align-items:  center; 
+   justify-content: center;
+    flex-direction:  column; 
+    width: 100%;
+}
+
+.example-card {
+    /* max-width: 400px; */
+  }
+  
+  .example-header-image {
+    background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+    background-size: cover;
+  }
+
+  .liked{
+    color: red;
+  }
+
+  .text-content{
+    word-break: break-all;
+}

@@ -1,0 +1,21 @@
+<mat-card>
+    <mat-card-content>
+        <form [formGroup]="loginForm">
+            <h2>Se connecter</h2>
+            <mat-form-field>
+                <input matInput type="text" placeholder="Email" formControlName="emailCtrl" required>
+                <mat-error>
+                    Veuillez saisir un email valide
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput type="password" placeholder="Mot de passe" formControlName="passwordCtrl" required>
+                <mat-error>
+                    Veuillez saisir un mot de passe valid
+                </mat-error>
+            </mat-form-field>
+            <button mat-raised-button color="primary" (click)="login()" [disabled]="!loginForm.valid">Se connecter</button>
+            <button mat-raised-button color="primary" (click)="goToRegister()">S'inscrire</button>
+        </form>
+    </mat-card-content>
+</mat-card>

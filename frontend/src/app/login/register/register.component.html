@@ -1,0 +1,47 @@
+<mat-card>
+    <mat-card-content>
+        <form [formGroup]="registerForm">
+            <h2>S'inscrire</h2>
+            <mat-form-field appearance="fill" >
+                <input placeholder="Nom d'utilisateur"  type="text" matInput formControlName="nameCtrl">
+            </mat-form-field>
+            <mat-form-field appearance="fill" >
+                <input placeholder="Email"  type="text" matInput formControlName="emailCtrl">
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <input placeholder="Mot de passe"   type="password" matInput formControlName="passwordCtrl">
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <input placeholder="Confirmer le mot de passe"   type="password" matInput formControlName="rpasswordCtrl">
+            </mat-form-field>
+            <button mat-raised-button color="primary" (click)="register()" [disabled]="!registerForm.valid">S'inscire</button>
+            <a href="javascript:void(0)" style="margin-left: 50%; color:grey" (click)="goToLogin()">Déjà inscrit ?</a>
+        </form>
+    </mat-card-content>
+</mat-card>
+<!-- 
+<div [formGroup]="registerForm">
+
+    <mat-form-field appearance="fill" >
+        <input placeholder="Jean"  type="text" matInput formControlName="nameCtrl">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" >
+        <input placeholder="pat@example.com"  type="text" matInput formControlName="emailCtrl">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+        <input placeholder="password"   type="password" matInput formControlName="passwordCtrl">
+    </mat-form-field>
+
+    
+    <mat-form-field appearance="fill">
+        <input placeholder="password"   type="password" matInput formControlName="rpasswordCtrl">
+    </mat-form-field>
+
+ <button mat-button (click)="register()" [disabled]="!registerForm.valid">S'inscire</button>
+ <button mat-button (click)="goToLogin()">Se connecter</button>
+
+
+</div>
+ -->

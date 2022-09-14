@@ -1,0 +1,81 @@
+<div >
+
+  <mat-card>
+    <mat-form-field style="width: 100%;"  >
+      <textarea matInput placeholder="Message" [formControl]="contentCtrl"></textarea>
+  </mat-form-field>
+
+  <mat-chip-list #chipList aria-label="Fruit selection">
+    <mat-chip *ngIf="file" (removed)="removeFile()">
+      {{file.name}}
+      <button matChipRemove>
+        <mat-icon>cancel</mat-icon>
+      </button>
+    </mat-chip>
+
+  </mat-chip-list>
+ <mat-card-actions>
+   <div style="display: flex; align-items: center; justify-content: space-between;">
+      <button mat-icon-button type="button" (click)="fileInput.click(); $event.stopPropagation();">
+        <mat-icon>image</mat-icon>
+        <input #fileInput type="file" (change)="uploadFile($event); $event.stopPropagation();" style="display:none;" />
+      </button>
+
+    <button mat-button [disabled]="!contentCtrl.valid && !file" (click)="sendFeed()">Envoyer</button>
+  </div>
+ </mat-card-actions>
+  </mat-card>
+
+
+
+ <div style="margin-top: 5px;" *ngFor="let feed of feeds; let i = index">
+
+ <mat-card (click)="goTodetail(i)" class="example-card">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>{{feed.name}}</mat-card-title>
+      <mat-card-subtitle>{{feed.created_at | date }}</mat-card-subtitle>
+
+      <button style="position: absolute; right: 0;" (click)="$event.stopPropagation();" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button *ngIf="!feed.saved" (click)="addBookmark(i); $event.stopPropagation();" mat-menu-item>
+          <span>Ajouter au signet</span>
+        </button>
+        <button *ngIf="feed.saved" (click)="deleteBookmark(i); $event.stopPropagation();" mat-menu-item>
+          <span>Supprimer du signet</span>
+        </button>
+        <button  *ngIf="currentUser.id === feed.userId" color="warn" (click)="deletePost(i); $event.stopPropagation();" mat-menu-item>
+          <span>Supprimer</span>
+        </button>
+      </mat-menu>
+    </mat-card-header>
+    <mat-card-content>
+      <p class="text-content">{{feed.content}}</p>
+      
+      <div *ngIf="feed.has_file">
+      <div *ngFor="let attachment of ('takerfiles/' + feed.id + '/') | getAmazonFiles | async">
+      <img style="width: 100%;" *ngIf="attachment.typeFile === 'img'" [src]="attachment.url" [alt]="attachment.fullName" width="600" height="400">
+      <div *ngIf="attachment.typeFile === 'video'">
+        <video  style="width: 100%;" controls width="600">
+          <source [src]="attachment.url"  type="video/mp4">
+        </video>
+      </div>
+      </div>
+    </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button [ngClass]="{'liked': feed.liked }" (click)="feed.liked ? dislikeFeed(i) : likeFeed(i); $event.stopPropagation();" mat-icon-button>
+          <mat-icon>favorite</mat-icon>
+      </button>
+      <small>{{feed.likes}}</small>
+
+      <button  mat-icon-button (click)="goTodetail(i); $event.stopPropagation();">
+        <mat-icon>question_answer</mat-icon>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+        
+ </div>
+</div>
